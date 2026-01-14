@@ -1,0 +1,55 @@
+{
+  "name": "noaber/lunar-mollie",
+  "description": "Mollie payment driver for LunarPHP.",
+  "keywords": [
+    "lunarphp",
+    "laravel",
+    "mollie"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Noaber",
+      "email": "info@postmans.nl"
+    }
+  ],
+  "require": {
+    "php": "^8.2",
+    "laravel/framework": "^11.0 | ^12.0",
+    "lunarphp/core": "^1.0",
+    "mollie/laravel-mollie": "^v4.0.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^10.5",
+    "mockery/mockery": "^1.4.4",
+    "orchestra/testbench": "^9.0",
+    "pestphp/pest": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Noaber\\Lunar\\Mollie\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Noaber\\Lunar\\Mollie\\": "tests/"
+    }
+  },
+  "extra": {
+    "lunar": {
+      "name": "Mollie Payments"
+    },
+    "laravel": {
+      "providers": [
+        "Noaber\\Lunar\\Mollie\\MolliePaymentsServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  }
+}
