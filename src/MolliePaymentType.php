@@ -60,9 +60,9 @@ class MolliePaymentType extends AbstractPayment
             description: 'Order #' . $this->order->reference,
             amount: new Money(
                 $this->order->currency->code,
-                $this->order->total->formatted($this->order->currency, false)
+                $this->order->total->decimal
             ),
-            redirectUrl: route(config('lunar.mollie.redirect_route', 'mollie.redirect')),
+            redirectUrl: route(config('lunar.mollie.redirect_route', 'mollie.redirect'), ['order' => $this->order->id, 'transaction' => $transaction->id]),
             webhookUrl: route(config('lunar.mollie.webhook_route', 'mollie.webhook')),
             metadata: [
                 "order_id" => $this->order->id,

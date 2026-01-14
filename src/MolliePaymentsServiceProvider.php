@@ -42,7 +42,7 @@ class MolliePaymentsServiceProvider extends ServiceProvider
     private function registerPublishables() {
         // make lunar paynl config publishable
         $this->publishes([
-            __DIR__.'/../config/mollie.php' => \Noaber\Lunar\Mollie\config_path('lunar/mollie.php'),
+            __DIR__.'/../config/mollie.php' => config_path('lunar/mollie.php'),
         ], 'lunar.mollie.config');
     }
 }
