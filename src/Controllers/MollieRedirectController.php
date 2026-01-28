@@ -16,7 +16,7 @@ class MollieRedirectController
 
         // Transaction succeeded, authorize payment
         $paymentAuthorize = Payments::driver('mollie')
-            ->withData(['paymentId' => $transaction->reference,])
+            ->withData(['id' => $transaction->reference,])
             ->authorize();
 
         if (!$paymentAuthorize->success) {
