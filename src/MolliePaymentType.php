@@ -171,6 +171,16 @@ class MolliePaymentType extends AbstractPayment
         return $response;
     }
 
+    /**
+     * get redirect url
+     * @param Payment $payment
+     * @return string
+     */
+    public function getRedirectUrl(Payment $payment): string
+    {
+        return $payment->getCheckoutUrl();
+    }
+
     public function capture(Transaction|\Lunar\Models\Contracts\Transaction $transaction, $amount = 0): PaymentCapture
     {
         return new PaymentCapture(success: true);
