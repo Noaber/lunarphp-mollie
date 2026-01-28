@@ -15,19 +15,17 @@ class MollieRedirectController
         }
 
         // Transaction succeeded, authorize payment
-        $payment_authorize = Payments::driver('mollie')
+        $paymentAuthorize = Payments::driver('mollie')
             ->withData(['paymentId' => $transaction->reference,])
             ->authorize();
 
-        if (!$payment_authorize->success) {
-            $data = json_decode($payment_authorize->message, true);
+        if (!$paymentAuthorize->success) {
+            $data = json_decode($paymentAuthorize->message, true);
 
             return match ($data['status']) {
-                'open' => $this->redirectTo('payment_open_route'),
-                'CANCEL' => $this->redirectTo('payment_canceled_route'),
-                'VERIFY' => $this->redirectTo('payment_canceled_route'),
-                'PENDING' => $this->redirectTo('payment_canceled_route'),
-                default => $this->redirectTo('payment_failed_route'),
+                'open' => redirect()->route(config('lunar.mollie.payment_open_route')),
+                'canceled' => redirect()->route(config('lunar.mollie.payment_canceled_route')),
+                default => redirect()->route(config('lunar.mollie.payment_failed_route')),
             };
         }
 
