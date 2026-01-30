@@ -12,10 +12,10 @@ class MollieWebhookController
 {
     public function webhook(Request $request): Application|ResponseFactory|Response
     {
-        $payment_id = $request->input('order_id');
+        $paymentId = $request->input('id');
 
         Payments::driver('mollie')
-            ->withData(['id' => $payment_id,])
+            ->withData(['id' => $paymentId,])
             ->authorize();
 
         // return paynl status
