@@ -15,7 +15,7 @@ class MollieWebhookController
         $payment_id = $request->input('order_id');
 
         Payments::driver('mollie')
-            ->withData(['paymentId' => $payment_id,])
+            ->withData(['id' => $payment_id,])
             ->authorize();
 
         // return paynl status
