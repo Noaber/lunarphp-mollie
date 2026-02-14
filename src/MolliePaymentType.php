@@ -156,10 +156,8 @@ class MolliePaymentType extends AbstractPayment
         if (($payment->isPaid() || $payment->isAuthorized())) {
             $this->order->placed_at = now();
         }
-        $this->order->status =
-            config('lunar.mollie.payment_status_mappings.' . $payment->status)
-            ?? $this->order->status;
-        $this->order->save();
+        $this->order->status = config('lunar.mollie.payment_status_mappings.' . $payment->status) ?? $this->order->status;
+        $this->order->saveQuietly();
 
         $response = new PaymentAuthorize(
             success: ($payment->isPaid() || $payment->isAuthorized()),
