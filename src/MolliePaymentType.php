@@ -153,11 +153,8 @@ class MolliePaymentType extends AbstractPayment
             ],
         ]);
 
-        if (($payment->isPaid() || $payment->isAuthorized())) {
-            $this->order->placed_at = now();
-        }
-        $this->order->status = config('lunar.mollie.payment_status_mappings.' . $payment->status) ?? $this->order->status;
-        $this->order->saveQuietly();
+        // save order
+        $this->setOrderData($payment);
 
         $response = new PaymentAuthorize(
             success: ($payment->isPaid() || $payment->isAuthorized()),
@@ -179,13 +176,56 @@ class MolliePaymentType extends AbstractPayment
         return $payment->getCheckoutUrl();
     }
 
+    /**
+     * payment provider capture
+     * @param Transaction|\Lunar\Models\Contracts\Transaction $transaction
+     * @param $amount
+     * @return PaymentCapture
+     */
     public function capture(Transaction|\Lunar\Models\Contracts\Transaction $transaction, $amount = 0): PaymentCapture
     {
         return new PaymentCapture(success: true);
     }
 
+    /**
+     * payment provider refund
+     * @param Transaction|\Lunar\Models\Contracts\Transaction $transaction
+     * @param int $amount
+     * @param $notes
+     * @return PaymentRefund
+     */
     public function refund(Transaction|\Lunar\Models\Contracts\Transaction $transaction, int $amount, $notes = null): PaymentRefund
     {
         return new PaymentRefund(success: false, message: 'Not implemented');
+    }
+
+    /**
+     * set order data
+     * @param $payment
+     * @return void
+     */
+    private function setOrderData($payment): void
+    {
+        if ($this->order === null) {
+            return;
+        }
+
+        // get default order status
+        $orderStatus = config('lunar.mollie.payment_status_mappings.' . $payment->status) ?? $this->order->status;
+
+        // set payed at
+        if (($payment->isPaid() || $payment->isAuthorized())) {
+            $this->order->placed_at = now();
+        }
+
+        // check for pre-order status
+        $preOrderStatus = config('lunar.mollie.pre_order_status.' . $this->order->status . '-' . $payment->status);
+        $newPreOrderStatus = config('lunar.orders.statuses.' . $preOrderStatus);
+        if ($preOrderStatus !== null && $newPreOrderStatus !== null) {
+            $orderStatus = $newPreOrderStatus;
+        }
+
+        $this->order->status = $orderStatus;
+        $this->order->saveQuietly();
     }
 }

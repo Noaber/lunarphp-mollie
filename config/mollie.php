@@ -72,4 +72,19 @@ return [
         'failed' => 'payment-failed',
         'paid' => 'payment-received',
     ],
+
+    /*
+     * if the order status is the same as the key, then instead of having the default status from above mapping we use this status
+     *
+     * example:
+     * 'order_status' => [
+     *   'preorder' => 'preorder-payment-received'
+     * ],
+     *
+     * if he key is preorder-paid (based on order->status and payment->status) then instead of the default status after payment will be preorder-payment-received
+     * but the value status should exist in lunar/order config file
+     */
+    'order_status' => [
+        'preorder-paid' => 'preorder-payment-received'
+    ],
 ];
