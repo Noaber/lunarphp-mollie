@@ -219,7 +219,7 @@ class MolliePaymentType extends AbstractPayment
         }
 
         // check for pre-order status
-        $preOrderStatus = config('lunar.mollie.pre_order_status.' . $this->order->status . '-' . $payment->status);
+        $preOrderStatus = config('lunar.mollie.order_status.' . $this->order->status . '-' . $payment->status);
         $newPreOrderStatus = config('lunar.orders.statuses.' . $preOrderStatus);
         if ($preOrderStatus !== null && $newPreOrderStatus !== null) {
             $orderStatus = $newPreOrderStatus;
